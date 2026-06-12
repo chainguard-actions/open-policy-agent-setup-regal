@@ -1,16 +1,93 @@
-# open-policy-agent/setup-regal
+# Setup Regal
 
-Sets up Regal, the Rego linter for OPA.
+GitHub action to configure the [Regal](https://github.com/StyraInc/regal) CLI.
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/open-policy-agent/setup-regal](https://github.com/open-policy-agent/setup-regal).
+## Basic Usage
 
-## Versions
+The following example shows how to use the action to install the latest version of Regal and lint some files
+in `policy`:
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v0.2.0 | [`v0.2.0`](https://github.com/chainguard-actions/open-policy-agent-setup-regal/tree/v0.2.0) | [`94ad289`](https://github.com/open-policy-agent/setup-regal/commit/94ad2891f53efdb7ebe7c6836bc25ecc9504aec1) |
-| v1.0.0 | [`v1.0.0`](https://github.com/chainguard-actions/open-policy-agent-setup-regal/tree/v1.0.0) | [`33a142b`](https://github.com/open-policy-agent/setup-regal/commit/33a142b1189004e0f14bf42b15972c67eecce776) |
-| v2.0.0 | [`v2.0.0`](https://github.com/chainguard-actions/open-policy-agent-setup-regal/tree/v2.0.0) | [`761188c`](https://github.com/open-policy-agent/setup-regal/commit/761188c3b435761fa254beca508a44875619648f) |
+```yml
+name: Run Regal Lint Check
+on: [push]
+jobs:
+  lint-rego:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    - name: Setup Regal
+      uses: StyraInc/setup-regal@main
+      with:
+        version: latest
+
+    - name: Lint
+      run: regal lint --format=github ./policy 
+```
+
+## Choose Regal Version
+
+### Using Latest
+
+Using the latest version of Regal allows you to keep up-to-date with the latest Rules and best practices. However,
+it might mean that policies that once passed, will need to be updated to pass with the latest version of Regal's rules.
+
+> [!NOTE]  
+> You can always disable rules using [Regal config](https://docs.styra.com/regal/#configuration).
+
+```yml
+steps:
+  - name: Setup Regal
+    uses: StyraInc/setup-regal@main
+    with:
+      version: latest
+```
+
+It's also possible to use a pinned version of Regal. This is recommended for pipelines that deploy to production
+environments.
+
+```yml
+steps:
+  - name: Setup Regal
+    uses: StyraInc/setup-regal@main
+    with:
+      version: x.y.z
+```
+
+You can also use a SemVer or [SemVer range](https://www.npmjs.com/package/semver#ranges).
+
+```yml
+steps:
+  - name: Setup Regal
+    uses: StyraInc/setup-regal@main
+    with:
+      version: 0.10
+```
+
+```yml
+steps:
+  - name: Setup Regal
+    uses: StyraInc/setup-regal@main
+    with:
+      version: <0.10
+```
+
+## Inputs
+
+The action supports the following inputs:
+
+- `version`: Optional, defaults to `latest`. [SemVer ranges](https://www.npmjs.com/package/semver#ranges) are supported too.
+- `github-token`: Optional, defaults to `${{ github.token }}`. 
+
+## Credits
+
+This repo is based on the [Setup OPA Action](https://github.com/open-policy-agent/setup-opa).
+
+## Community
+
+For questions, discussions and announcements related to Styra products, services and open source projects, please join
+the Styra community on [Slack](https://communityinviter.com/apps/styracommunity/signup)!
 
 ## Privacy
 
