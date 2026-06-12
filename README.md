@@ -8,6 +8,7 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 | Version | Tag | Upstream commit |
 |---------|-----|-----------------|
+| v0.1.0 | [`v0.1.0`](https://github.com/chainguard-actions/open-policy-agent-setup-regal/tree/v0.1.0) | [`2a806cc`](https://github.com/open-policy-agent/setup-regal/commit/2a806ccd6ecf52b18b941e40e3555dba2124c54e) |
 | v0.2.0 | [`v0.2.0`](https://github.com/chainguard-actions/open-policy-agent-setup-regal/tree/v0.2.0) | [`94ad289`](https://github.com/open-policy-agent/setup-regal/commit/94ad2891f53efdb7ebe7c6836bc25ecc9504aec1) |
 | v1.0.0 | [`v1.0.0`](https://github.com/chainguard-actions/open-policy-agent-setup-regal/tree/v1.0.0) | [`33a142b`](https://github.com/open-policy-agent/setup-regal/commit/33a142b1189004e0f14bf42b15972c67eecce776) |
 | v2.0.0 | [`v2.0.0`](https://github.com/chainguard-actions/open-policy-agent-setup-regal/tree/v2.0.0) | [`761188c`](https://github.com/open-policy-agent/setup-regal/commit/761188c3b435761fa254beca508a44875619648f) |
