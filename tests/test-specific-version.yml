@@ -1,0 +1,30 @@
+name: Test specific version installation
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: setup
+        uses: .
+        with:
+          version: v0.27.0
+          github-token: ${{ github.token }}
+      - name: Assert regal is installed at the specified version
+        run: |
+          echo "Checking regal is on PATH..."
+          if ! command -v regal > /dev/null 2>&1; then
+            echo "FAIL: regal not found on PATH"
+            exit 1
+          fi
+          echo "regal found at: $(command -v regal)"
+          echo "Checking regal version output..."
+          VERSION_OUTPUT=$(regal version 2>&1) || true
+          echo "Version output: $VERSION_OUTPUT"
+          if echo "$VERSION_OUTPUT" | grep -q "0.27.0"; then
+            echo "PASS: regal v0.27.0 is installed"
+          else
+            echo "FAIL: expected version 0.27.0 but got: $VERSION_OUTPUT"
+            exit 1
+          fi

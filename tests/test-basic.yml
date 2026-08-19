@@ -1,0 +1,29 @@
+name: Test basic usage (latest version)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: setup
+        uses: .
+        with:
+          version: latest
+          github-token: ${{ github.token }}
+      - name: Assert regal is installed and executable
+        run: |
+          echo "Checking regal is on PATH..."
+          if ! command -v regal > /dev/null 2>&1; then
+            echo "FAIL: regal not found on PATH"
+            exit 1
+          fi
+          echo "regal found at: $(command -v regal)"
+          echo "Checking regal version output..."
+          REGAL_VERSION=$(regal version 2>&1) || true
+          echo "regal version: $REGAL_VERSION"
+          if [ -z "$REGAL_VERSION" ]; then
+            echo "FAIL: regal version returned empty output"
+            exit 1
+          fi
+          echo "PASS: regal is installed and working"
