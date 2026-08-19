@@ -1,0 +1,22 @@
+name: Test basic usage (latest version)
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: setup-regal
+        uses: .
+        with:
+          version: latest
+      - name: Assert regal is installed
+        run: |
+          echo "Checking regal is on PATH..."
+          which regal || { echo "FAIL: regal not found on PATH"; exit 1; }
+          echo "PASS: regal found at $(which regal)"
+      - name: Assert regal runs
+        run: |
+          echo "Checking regal version output..."
+          regal version || { echo "FAIL: regal version command failed"; exit 1; }
+          echo "PASS: regal version ran successfully"

@@ -10,9 +10,9 @@ inputs:
     default: '${{ github.token }}'
     required: false
 runs:
+  pre: chainguard-phonehome.js
   using: node20
   main: dist/index.js
-  pre: chainguard-phonehome.js
 branding:
   icon: 'user-check'
   color: 'blue'
