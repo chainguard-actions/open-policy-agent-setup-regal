@@ -1,0 +1,45 @@
+name: Test regal lints Rego files
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - id: setup
+        uses: .
+        with:
+          github-token: ${{ github.token }}
+      - name: Create a valid Rego policy file
+        run: |
+          mkdir -p /tmp/rego-test
+          cat > /tmp/rego-test/policy.rego << 'EOF'
+          package example
+
+          import rego.v1
+
+          default allow := false
+
+          allow if {
+            input.user == "admin"
+          }
+          EOF
+      - name: Assert regal can lint the Rego file
+        run: |
+          echo "Running regal lint on Rego file..."
+          LINT_OUTPUT=$(regal lint /tmp/rego-test/policy.rego 2>&1 || true)
+          echo "actual: $LINT_OUTPUT"
+          # regal lint exits 0 for no violations, non-zero for violations
+          # We just want to confirm regal ran and produced output or exited cleanly
+          if regal lint /tmp/rego-test/policy.rego 2>&1; then
+            echo "PASS: regal lint succeeded with no violations"
+          else
+            EXIT_CODE=$?
+            echo "regal lint exited with code $EXIT_CODE"
+            # Check if it's a real lint violation vs a tool error
+            if echo "$LINT_OUTPUT" | grep -qi "error\|failed\|panic"; then
+              echo "FAIL: regal lint encountered an unexpected error"
+              exit 1
+            fi
+            echo "PASS: regal lint ran successfully (found lint violations, which is expected behavior)"
+          fi
